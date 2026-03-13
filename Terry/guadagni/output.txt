@@ -1,0 +1,10 @@
+Case #1: 3
+Case #2: 4
+Case #3: 3
+Case #4: 7
+Case #5: 179
+Case #6: 188
+Case #7: 535
+Case #8: 920
+Case #9: 922
+Case #10: 2011

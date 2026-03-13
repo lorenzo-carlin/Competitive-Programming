@@ -1,0 +1,14 @@
+Case #1: 7
+Case #2: 5
+Case #3: 18
+Case #4: 462
+Case #5: 239
+Case #6: 2003
+Case #7: 5000
+Case #8: 21197
+Case #9: 20001
+Case #10: 101020
+Case #11: 41
+Case #12: 108
+Case #13: 8754
+Case #14: 100043

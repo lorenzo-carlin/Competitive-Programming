@@ -1,0 +1,4 @@
+def sum 1000
+def dif 980
+calc foo + abc =
+calc foo - abc =

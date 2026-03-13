@@ -1,0 +1,5 @@
+dog
+3
+snake
+gmg
+gog

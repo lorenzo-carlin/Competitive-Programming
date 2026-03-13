@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+constexpr int INF = 1e9;
+ll inv = 0;
+
+void merge_sort(vector<int> &a)
+{
+    if(a.size() == 1) return;
+
+    int dimLeft = (a.size()+1)/2;
+    int dimRight = a.size()/2;
+    vector<int> subLeft(dimLeft), subRight(dimRight);
+    for(int i = 0; i < dimLeft; i++)
+    {
+        subLeft[i] = a[i];
+    }
+    for(int i = 0; i < dimRight; i++)
+    {
+        subRight[i] = a[dimLeft+i];
+    }
+    
+    merge_sort(subLeft);
+    merge_sort(subRight);
+
+    subLeft.push_back(INF);
+    subRight.push_back(INF);
+
+    int l = 0, r = 0;
+    for(int i = 0; i < a.size(); i++)
+    {
+        if(subLeft[l] <= subRight[r])
+        {
+            a[i] = subLeft[l];
+            l++;
+        } else
+        {
+            a[i] = subRight[r];
+            r++;
+            inv += (dimLeft-l);
+        }
+    }
+}
+
+ll paletta_sort(int n, int v[])
+{
+    for(int i = 0; i < n; ++i)
+    {
+        if((v[i]%2) != (i%2))
+        {
+            return -1;
+        }
+    }
+
+    vector<int> a, b;
+    for(int i = 0; i < n; ++i)
+    {
+        if(i%2)
+        {
+            a.push_back(v[i]);
+        } else
+        {
+            b.push_back(v[i]);
+        }
+    }
+
+    merge_sort(a);
+    merge_sort(b);
+
+    return inv;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int n; cin >> n;
+    int a[n];
+    for(int i = 0; i < n; ++i)
+    {
+        cin >> a[i];
+    }
+    cout << paletta_sort(n, a) << "\n";
+}
