@@ -9,62 +9,77 @@ int main()
 
 	int n, m; cin >> n >> m;
 	string s; cin >> s;
+
+	vector<vector<int>> f(n, vector<int> (26, 0));
 	vector<vector<int>> adj(n);
+	vector<int> deg(n, 0);
+
 	for(int i = 0, a, b; i < m; ++i)
 	{
-		cin >> a >> b;
-		a--; b--;
+		cin >> a >> b; a--; b--;
 		adj[a].push_back(b);
+		deg[b]++;
 	}
 
-	// ordinamento topologico
-	vector<int> topo, col(n, 0);
 	bool impossible = false;
-	vector<vector<int>> G(n);	// grafo effettivo
+	vector<int> col(n, 0);
 
-	auto toposort = [&] (auto toposort, int v) -> void
+	auto dfs = [&] (auto dfs, int v) -> void
 	{
 		col[v] = 1;
+
 		for(int u: adj[v])
 		{
-			if(col[u] == 1) impossible = true;			
-			if(col[u] == 0)
-			{
-				toposort(toposort, u);
-				G[v].push_back(u);
-			}
+			if(col[u] == 1) impossible = true;
+			if(col[u] == 0) dfs(dfs, u);
 		}
-		topo.push_back(v);
+
 		col[v] = 2;
 	};
+
+	for(int i = 0; i < n; ++i)
+	{
+		if(col[i] == 0) dfs(dfs, i);
+	}
+
+	if(impossible)
+	{
+		cout << -1 << "\n";
+		return 0;
+	}
+
+	queue<int> q;
 	
 	for(int i = 0; i < n; ++i)
 	{
-		if(col[i] > 0) continue;
-		toposort(toposort, i);
+		if(deg[i] == 0)
+		{
+			q.push(i);
+			f[i][s[i]-'a']++;
+		}
 	}
 
-	reverse(begin(topo), end(topo));
-
-	// processo i nodi in ordine
-	vector<vector<int>> f(n, vector<int> (26, 0));
-	// f[i][j] := occorrenze della lettera j nel path fino a i (incluso)
-
-	int mx = 0;
-	for(int i = 0; i < n; ++i)
+	while(!q.empty())
 	{
-		int idx = topo[i];
-		f[idx][s[idx]-'a']++;
+		int v = q.front();
+		q.pop();
 
-		for(int u: G[idx])
+		for(int u: adj[v])
 		{
 			for(int j = 0; j < 26; ++j)
 			{
-				f[u][j] += f[idx][j];
+				f[u][j] = max(f[u][j], f[v][j]);
+			}
+			deg[u]--;
+			if(deg[u] == 0)
+			{
+				f[u][s[u]-'a']++;
+				q.push(u);
 			}
 		}
 	}
 
+	int mx = 0;
 	for(int i = 0; i < n; ++i)
 	{
 		for(int j = 0; j < 26; ++j)
@@ -73,6 +88,5 @@ int main()
 		}
 	}
 
-	if(impossible) cout << -1 << "\n";
-	else cout << mx << "\n";
+	cout << mx << "\n";
 }

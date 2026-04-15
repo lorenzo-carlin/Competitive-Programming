@@ -4,66 +4,82 @@ using ll = long long;
 
 void solve()
 {
-	int n, k, c; cin >> n >> k >> c;
+	int n, k, c;
+	cin >> n >> k >> c;
+
 	vector<vector<int>> adj(n);
-	for(int i = 0, a, b; i < n-1; ++i)
+	for(int i = 0, a, b; i < n-1; i++)
 	{
-		cin >> a >> b; a--; b--;
+		cin >> a >> b;
+		a--; b--;
 		adj[a].push_back(b);
 		adj[b].push_back(a);
 	}
 
-	vector<ll> depth(n, -1);
-    vector<pair<ll,int>> mx1(n, {0, -1}), mx2(n, {0, -1});
-	vector<ll> up(n, -1);
-	depth[0] = 0;
+	// profondità di ciascun nodo
+	vector<ll> depth(n, 0);
+	// mx[v].first = massima distanza in subtree v
+	// mx[v].second = seconda massima
+	vector<pair<ll,ll>> mx(n, {0, 0});
+	// best[v] = figlio che contribuisce alla massima distanza (down1)
+	vector<int> best(n, -1);
 
-	auto dfs1 = [&] (auto dfs1, int v, int p) -> void
-	{
-		for(int u: adj[v])
+	// DFS per calcolare depth, mx1 e mx2
+	auto dfs1 = [&] (auto self, int v, int p) -> void {
+		for(int u : adj[v])
 		{
 			if(u == p) continue;
-
-			depth[u] = depth[v]+1;
-			dfs1(dfs1, u, v);
-
-			if(mx1[u].first+1 > mx1[v].first)
+			depth[u] = depth[v] + 1;
+			self(self, u, v);
+			ll d = mx[u].first + 1;
+			if(d > mx[v].first)
 			{
-				swap(mx1[v], mx2[v]);
-				mx1[v].first = mx1[u].first+1;
-				mx1[v].second = u;
-			} else if(mx1[u].first+1 > mx2[v].first)
+				mx[v].second = mx[v].first;
+				mx[v].first = d;
+				best[v] = u;
+			}
+			else if(d > mx[v].second)
 			{
-				mx2[v].first = mx1[u].first+1;
-				mx2[v].second = u;
+				mx[v].second = d;
 			}
 		}
+	};
 
-		for(int u: adj[v])
+	// DFS per calcolare up[v]
+	vector<ll> up(n, 0);
+	auto dfs2 = [&] (auto self, int v, int p) -> void {
+		for(int u : adj[v])
 		{
 			if(u == p) continue;
-			up[u] = up[v]+1;			
-			if(mx1[v].second == u) up[u] = max(up[u], mx2[v].first+1);
-			else up[u] = max(up[u], mx1[v].first+1);
+			if(best[v] == u)
+				up[u] = max(up[v] + 1, mx[v].second + 1);
+			else
+				up[u] = max(up[v] + 1, mx[v].first + 1);
+			self(self, u, v);
 		}
 	};
 
 	dfs1(dfs1, 0, -1);
+	dfs2(dfs2, 0, -1);
 
-	ll mx = 0;
+	// calcolo il massimo profitto
+	ll ans = 0;
 	for(int i = 0; i < n; ++i)
 	{
-		mx = max(mx, (ll)k*max(mx1[i].first,up[i])-c*depth[i]);
+		ll dist = max(mx[i].first, up[i]);
+		ans = max(ans, k * dist - c * depth[i]);
 	}
 
-	cout << mx << "\n";
+	cout << ans << "\n";
 }
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
+	cin.tie(nullptr);
 
-	int t; cin >> t;
+	int t;
+	cin >> t;
 	while(t--) solve();
 }
+
