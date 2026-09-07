@@ -1,41 +1,105 @@
-// Fenwick Tree, or Binary Indexed Tree (BIT) -> sum queries
+/*
+ * Fenwick Tree
+ * Supports efficient point updates and prefix-sum queries in O(log n) time.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
+using ll = long long;
 
-int n;
-
-int sum(int k, vector<int> &tree)
+struct FenwickTree
 {
-    int s = 0;
-    while(k >= 1)
-    {
-        s += tree[k];
-        k -= k&-k;
-    }
-    return s;
-}
+	vector<int> bit;
+	int n;
 
-void add(int k, int x, vector<int> &tree)
+	FenwickTree(int _n)
+	{
+		 n = _n;
+		 bit.assign(n, 0);
+	}
+
+	FenwickTree(vector<int> &a) : FenwickTree(a.size())
+	{
+		for(int i = 0; i < n; ++i)
+		{
+			bit[i] += a[i];
+			int r = (i | (i+1));
+			if(r < n) bit[r] += bit[i];
+		}
+	}
+
+	int sum(int r)
+	{
+		int res = 0;
+		while(r >= 0)
+		{
+			res += bit[r];
+			r = (r & (r+1)) - 1;
+		}
+		return res;
+	}
+
+	int sum(int l, int r)
+	{
+		return sum(r) - sum(l-1);
+	}
+
+	void add(int ind, int delta)
+	{
+		while(ind < n)
+		{
+			bit[ind] += delta;
+			ind = (ind | (ind+1));
+		}
+	}
+};
+
+struct FenwickTree2D
 {
-    while(k <= n)
-    {
-        tree[k] += x;
-        k += k&-k;
-    }
-}
+	vector<vector<int>> bit;
+	int n, m;
 
-int main()
-{
-    cin >> n;
-    vector<int> v(n+1); v[0] = 0;
-    for(int i = 1; i <= n; ++i)
-    {
-        cin >> v[i];
-    }
+	FenwickTree2D(int _n, int _m)
+	{
+		n = _n;
+		m = _m;
+		bit.assign(n, vector<int>(m, 0));
+	}
 
-    vector<int> tree(n+1, 0);
-    for(int i = 1; i <= n; ++i) add(i, v[i], tree);
+	FenwickTree2D(vector<vector<int>> &a) : FenwickTree2D(a.size(), a[0].size())
+	{
+		for(int i = 0; i < n; ++i)
+		{
+			for(int j = 0; j < m; ++j)
+			{
+				add(i, j, a[i][j]);
+			}
+		}
+	}
 
-    int l, r; cin >> l >> r;
-    cout << sum(r, tree)-sum(l-1, tree) << "\n";
-}
+	void add(int x, int y, int delta)
+	{
+		for(int i = x; i < n; i = (i | (i+1)))
+		{
+			for(int j = y; j < m; j = (j | (j+1)))
+			{
+				bit[i][j] += delta;
+			}
+		}
+	}
+
+	int sum(int x, int y)
+	{
+		int res = 0;
+		for(int i = x; i >= 0; i = (i & (i+1)))
+		{
+			for(int j = y; j >= 0; j = (j & (j+1)))
+			{
+				res += bit[i][j];
+			}
+		}
+		return res;
+	}
+};
+

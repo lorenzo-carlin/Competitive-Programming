@@ -1,7 +1,8 @@
-/*******************************
-Segment Tree: sum queries
-Point update and range queries
-*******************************/
+/*
+ * Segment Tree: sum queries
+ * Point update and range queries
+*/
+
 
 #include <bits/stdc++.h>
 using namespace std;

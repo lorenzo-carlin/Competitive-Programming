@@ -1,6 +1,8 @@
-/*******************************************
-Generates all subsets of a set of n elements
-*******************************************/
+/*
+ * Generating Subsets
+ * Generates all possible subsets of a given set of elements.
+ */
+
 
 #include <bits/stdc++.h>
 using namespace std;

@@ -1,3 +1,9 @@
+/*
+ * Queens on a Chessboard
+ * Solves the N-Queens problem by placing queens so that no two attack each other.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 

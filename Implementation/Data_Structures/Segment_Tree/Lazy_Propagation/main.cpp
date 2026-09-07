@@ -1,7 +1,8 @@
 /*******************************
 Segment Tree: sum queries
-Range update and point queries
+Range update and point queries (Lazy Propagation)
 *******************************/
+
 
 #include <bits/stdc++.h>
 using namespace std;

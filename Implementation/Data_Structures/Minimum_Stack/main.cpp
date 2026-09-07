@@ -1,3 +1,9 @@
+/*
+ * Minimum Stack
+ * Supports efficient insertion, removal, and retrieval of the minimum element.
+ */
+
+
 #include <iostream>
 #include <stack>
 using namespace std;

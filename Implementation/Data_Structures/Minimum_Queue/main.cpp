@@ -1,10 +1,8 @@
 /*
-Now we want to achieve the same operations with a queue,
-i.e. we want to add elements at the end and remove them from the front.
+ * Minimum Queue
+ * Supports efficient insertion, removal, and retrieval of the minimum element.
+ */
 
-Here we consider a simple method for modifying a queue.
-It has a big disadvantage though, because the modified queue will actually not store all elements.
-*/
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -29,7 +27,7 @@ void remove_element(int el, deque<int> &q)
 
 int find_minimum(deque<int> &q)
 {
-    return q.front();     
+    return q.front();
 }
 
 int main()

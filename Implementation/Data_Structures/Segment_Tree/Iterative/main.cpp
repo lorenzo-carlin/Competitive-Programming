@@ -1,3 +1,9 @@
+/*
+ * Segment Tree: sum query
+ * Iterative implementation
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
