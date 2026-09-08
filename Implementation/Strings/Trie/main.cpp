@@ -1,49 +1,61 @@
+/*
+ * Trie
+ * Stores strings in a prefix tree, supporting efficient insertion, search,
+ * and prefix queries in O(L) time, where L is the string length.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
-using ll = long long;
 
-constexpr int K = 26;
-
-struct Vertex
+struct TrieNode
 {
-    int n[K];
-    bool flag = false;
-
-    Vertex()
+    TrieNode *children[26];
+    bool EndOfWord;
+    
+    TrieNode ()
     {
-        fill(begin(n), end(n), -1);
+        EndOfWord = false;
+        for(int i = 0; i < 26; ++i)
+        {
+            children[i] = nullptr;
+        }
     }
 };
 
-vector<Vertex> trie(1);
-
-void add(string s)
+void insertKey(TrieNode *root, string key)
 {
-    int idx = 0;
-    for(char c: s)
+    TrieNode *cur = root;
+
+    for(char c: key)
     {
-        int x = c - 'a';
-        if(trie[idx].n[x] == -1)
+        if(cur->children[c-'a'] == nullptr)
         {
-            trie[idx].n[x] = trie.size();
-            trie.emplace_back();
+            TrieNode *newNode = new TrieNode();
+            cur->children[c-'a'] = newNode;
         }
-        idx = trie[idx].n[x];
+        cur = cur->children[c-'a'];
     }
-    trie[idx].flag = true;
+    cur->EndOfWord = true;
 }
 
-bool search(string s)
+bool searchKey(TrieNode *root, string key)
 {
-    int idx = 0;
-    for(char c: s)
+    TrieNode *cur = root;
+
+    for(char c: key)
     {
-        int x = c - 'a';
-        if(trie[idx].n[x] == -1)
+        if(cur->children[c-'a'] == nullptr)
         {
             return false;
         }
-        idx = trie[idx].n[x];
+        cur = cur->children[c-'a'];
     }
-    return trie[idx].flag;
+    return cur->EndOfWord;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
 }

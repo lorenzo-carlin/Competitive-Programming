@@ -1,3 +1,9 @@
+/*
+ * Fast Exponentiation
+ * Computes powers efficiently using exponentiation by squaring in O(log n) time.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;

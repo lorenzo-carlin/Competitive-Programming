@@ -1,3 +1,10 @@
+/*
+ * Bitmask DP
+ * Uses bitmasks to represent states and dynamic programming to efficiently
+ * solve problems involving subsets or combinations of elements.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;

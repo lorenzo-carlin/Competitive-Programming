@@ -1,3 +1,10 @@
+/*
+ * Subtree Query
+ * Processes queries over the subtree of a given node.
+ *
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;

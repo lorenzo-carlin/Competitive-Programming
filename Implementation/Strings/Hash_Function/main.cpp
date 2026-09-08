@@ -1,3 +1,10 @@
+/*
+ * Hash Function
+ * Maps input data to a fixed-size hash value for efficient hashing-based
+ * data structures and algorithms.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;

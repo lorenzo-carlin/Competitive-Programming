@@ -1,5 +1,9 @@
-// Implementation of the Knuth-Morris-Pratt Algorithm for computing
-// the Prefix function of a string.
+/*
+ * Prefix Function
+ * Computes the length of the longest proper prefix that is also a suffix
+ * for every prefix of a string, as used in the Knuth-Morris-Pratt (KMP) algorithm.
+ */
+
 
 #include <bits/stdc++.h>
 using namespace std;

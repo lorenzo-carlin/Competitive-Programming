@@ -1,3 +1,10 @@
+/*
+ * Modular Inverse
+ * Computes the modular multiplicative inverse of an integer using the
+ * Extended Euclidean Algorithm.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;

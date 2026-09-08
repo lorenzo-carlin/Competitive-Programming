@@ -1,11 +1,16 @@
+/*
+ * Eulerian Path
+ * Finds a path that traverses every edge of a graph exactly once.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
-
 int main()
 {
     int n, m; cin >> n >> m;
-    vector<set<int>> adj(n);
+    vector<multiset<int>> adj(n);
     vector<int> deg(n, 0);
     for(int i = 0, a, b; i < m; i++)
     {
@@ -15,7 +20,6 @@ int main()
         deg[a]++;
         deg[b]++;
     }
-
     bool possible = true;
     int st = -1, fn = -1;
     for(int i = 0; i < n; i++)
@@ -30,42 +34,39 @@ int main()
                 possible = false;
         }
     }
-
     int a = 0;
     while(a < n && deg[a] == 0)
         a++;
     if(a == n)
         possible = false;
-
     if(!possible)
     {
         cout << "IMPOSSIBLE\n";
         return 0;
     }
-
     vector<int> cycle;
     auto EC = [&] (auto EC, int v) -> void
     {
         while(!adj[v].empty())
         {
-            int u = *adj[v].begin();
-            adj[v].erase(u);
-            adj[u].erase(v);
+            auto it = adj[v].begin();
+            int u = *it;
+            adj[v].erase(it);
+            adj[u].erase(adj[u].find(v));
             EC(EC, u);
         }
         cycle.push_back(v);
     };
-
+    int extraEdge = 0;
     if(st != -1 && fn != -1)
     {
         adj[st].insert(fn);
         adj[fn].insert(st);
+        extraEdge = 1;
     }
-
     EC(EC, a);
-    if(cycle.size() != m+1)
+    if((int)cycle.size() != m + 1 + extraEdge)
         possible = false;
-
     if(possible)
     {
         if(st == -1 && fn == -1)

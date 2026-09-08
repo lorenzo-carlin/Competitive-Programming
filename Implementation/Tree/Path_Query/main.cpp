@@ -1,3 +1,10 @@
+/*
+ * Path Query
+ * Processes queries on paths between pairs of nodes in a tree.
+ *
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;

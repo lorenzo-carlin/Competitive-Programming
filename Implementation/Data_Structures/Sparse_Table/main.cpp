@@ -1,3 +1,10 @@
+/*
+ * Sparse Table
+ * Supports efficient static range queries, typically in O(log n) preprocessing
+ * and O(1) query time for idempotent operations such as range minimum.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;

@@ -1,8 +1,15 @@
+/*
+ * Z-Function
+ * Computes for each position the length of the longest substring starting there
+ * that matches the prefix of the string, enabling efficient pattern matching.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
 
-// Approccio naive: O(N^2)
+// Naive approach: O(N^2)
 vector<int> Z_function_1(string s) {
     int n = s.size();
     vector<int> z(n, 0);
@@ -15,7 +22,7 @@ vector<int> Z_function_1(string s) {
     return z;
 }
 
-// Approccio ottimizzato: O(N)
+// Optimized approach: O(N)
 vector<int> Z_function_2(string s) {
     int n = s.size();
     vector<int> z(n, 0);

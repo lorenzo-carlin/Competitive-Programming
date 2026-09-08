@@ -1,3 +1,10 @@
+/*
+ * Articulation Points
+ * Finds vertices whose removal increases the number of connected components
+ * in an undirected graph using DFS and low-link values.
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
