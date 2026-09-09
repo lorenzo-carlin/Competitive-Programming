@@ -1,54 +1,119 @@
 #include <bits/stdc++.h>
 using namespace std;
+using ll = long long;
 
-#define int long long
+constexpr int MAXN = 5e4+5;
+constexpr int MAXK = 21;
+constexpr int LOG = 17;
+constexpr int mod = 1e9+7;
+ll dp[MAXN][MAXK];		// dp[i][j] = nr di modi in cui si possono creare j gruppi con i case
+ll ps[MAXN+1][MAXK];	// ps[i][j] = dp[i-1][j] + dp[i-2][j] + ... + dp[0][j]
 
-const int mod = 1e9+7;
+void precalculate()
+{
+	// DP
+	for(int i = 0; i < MAXN; i++)
+	{
+		for(int j = 0; j < MAXK; j++)
+		{
+			if(j == 0)
+			{
+				dp[i][j] = 1;
+			} else if(i == 0)
+			{
+				dp[i][j] = 0;
+			} else
+			{
+				dp[i][j] = dp[i-1][j];
+				dp[i][j] += ps[i][j-1];
+			}
+			ps[i+1][j] = ps[i][j] + dp[i][j];
+			ps[i+1][j] %= mod;
+		}
+	}
+}
 
-int32_t main() {
-    int n, k;
-    cin >> n >> k;
+int GCD(int a, int b)
+{
+	if(b == 0) return a;
+	else return GCD(b, a%b);
+}
 
-    vector<vector<int>> dp(n + 1, vector<int> (k + 1));
-    vector<vector<int>> dpp(n + 1, vector<int> (k + 1));
-    
-    dp[0][0] = dpp[0][0] = 1;
-    for (int i = 1; i <= n; ++i) {
-        dp[i][0] = 1;
-        dpp[i][0] = dpp[i - 1][0] + dp[i][0];
-    }
-    for (int j = 1; j <= k; ++j) {
-        dp[j][j] = dpp[j][j] = 1;
-        for (int i = j + 1; i <= n; ++i) {
-            dp[i][j] = (dp[i - 1][j] + dpp[i - 2][j - 1] + dp[i - 1][j - 1]) % mod;
-            dpp[i][j] = (dpp[i - 1][j] + dp[i][j]) % mod;
-        }
-    }
+int main()
+{
+	precalculate();
 
-    vector<int> a(n, 100000);
-    //for (int i = 0; i < n; ++i)
-    //    cin >> a[i];
+	int n, k; cin >> n >> k;
+	vector<int> v(n);
+	for(int &i: v) cin >> i;
 
-    int ans = 0;
-    vector<int> gcd(n + 1); gcd[n] = 1;
-    vector<int> nxt(n + 1); nxt[n] = n;
-    for (int i = n - 1; i >= 0; --i) {
-        gcd[i] = a[i];
-        int e = i + 1;
-        while (a[i] % gcd[e] != 0)
-            ++e;
-        for (int j = i + 1; j < e; ++j)
-            gcd[j] = __gcd(gcd[j], gcd[j - 1]);
-        for (int j = e - 1; j >= i; --j)
-            nxt[j] = (gcd[j + 1] != gcd[j]) ? j + 1 : nxt[j + 1];
-        for (int j = i, jj; j < n; j = nxt[j]) {
-            jj = nxt[j];
-            for (int kl = 0, kr; kl < k; ++kl) {
-                kr = k - 1 - kl;
-                ans = (ans + gcd[j] * (dp[i][kl] * (dpp[n-j-1][kr] - (jj < n ? dpp[n-jj-1][kr] : 0) + mod) % mod)) % mod;
-            }
-        }
-    }
+	// Sparse Table
+	vector<vector<int>> ST(LOG, vector<int> (n, -1));
+	for(int i = 0; i < n; ++i)
+		ST[0][i] = v[i];
+	for(int j = 1; j < LOG; ++j)
+		for(int i = 0; i + (1 <<j) - 1 < n; ++i)
+			ST[j][i] = GCD(ST[j-1][i], ST[j-1][i+(1<<(j-1))]);
 
-    cout << ans << "\n";
+	// Iterazione
+	// calc(): calcola il GCD di tutti i numeri compresi tra v[a] e v[b]
+	auto calc = [&] (int a, int b) -> int
+	{
+		int w = log2(b-a+1);
+		return GCD(ST[w][a], ST[w][b-(1<<w)+1]);
+	};
+
+	// find(): calcola l'indice j' tale che GCD(a, j') != GCD(a, b)
+	auto find = [&] (int a, int b) -> int
+	{
+		int gcd = calc(a, b);
+		int l = b+1, r = n;
+		while(l < r)
+		{
+			int m = (l + r) / 2;
+			if(calc(a, m) == gcd)
+				l = m+1;
+			else
+				r = m;
+		}
+		return r;
+	};
+
+	ll ans = 0;
+	for(int i = 0; i < n; ++i)
+	{
+		vector<int> idx;
+		int ind = i, next = find(i, ind);
+		idx.push_back(ind);
+		while(next != n)
+		{
+			ind = next;
+			idx.push_back(ind);
+			next = find(i, ind);
+		}
+		idx.push_back(n);
+
+		int sz = idx.size();
+		for(int j = 0; j < sz-1; ++j)
+		{
+			int x = idx[j];
+			int y = idx[j+1]-1;
+			ll tmp;
+			for(int a = 0; a < k; a++)
+			{
+				tmp = 0;
+				tmp += (ps[n-x][k-a-1]-ps[n-y-1][k-a-1]+mod);
+				tmp %= mod;
+				tmp *= dp[i][a];
+				tmp %= mod;
+				tmp *= calc(i, y);
+				tmp %= mod;
+
+				ans += tmp;
+				ans %= mod;
+			}
+		}
+	}
+
+	cout << ans << "\n";
 }

@@ -1,48 +1,72 @@
 #include <bits/stdc++.h>
 using namespace std;
-using ll = long long;
+using ll =  long long;
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-
     int m, k; cin >> m >> k;
     string n; cin >> n;
 
-    sort(rbegin(n), rend(n));
-    map<int,vector<string>> v;
+    // sort di n
+    vector<int> cnt(10, 0);
+    for(int i = 0; i < m; i++)
+        cnt[n[i]-'0']++;
+    int idx = 9;
+    for(int i = 0; i < m; i++)
+    {
+        while(cnt[idx] == 0)
+            idx--;
+        n[i] = '0' + idx;
+        cnt[idx]--;
+    }
 
-    vector<int> ppow(k, 1);
-    for(int i = 1; i < k; i++)
+    // precalcolo le potenze di 10
+    vector<ll> ppow(m+1, 1);
+    for(int i = 1; i <= m; i++)
         ppow[i] = (ppow[i-1]*10) % k;
 
-    auto calc = [&] (string s) -> ll
+    // calcolo della congruenza di una stringa
+    auto f = [&] (string s) -> ll
     {
-        int res = 0;
+        ll res = 0;
         for(int i = 0; i < m; i++)
-            res = ((res + (((s[i] - '0')*ppow[m-i-1]) % k)) % k);
+        {
+            res += (n[i] - '0')*ppow[m-i-1];
+            res %= k;
+        }
         return res;
     };
 
-    int cnt = 0;
-    do
+    // trovo le permutazioni
+    map<int,int> first_occ;
+    int a = -1, b = -1;
+    for(int i = 0; i <= k; i++)
     {
-        if(n[0] == '0') break;
-        int c = calc(n);
-        v[c].push_back(n);
-        cnt++;
-    } while(cnt <= k && prev_permutation(begin(n), end(n)));
-
-    for(auto el: v)
-    {
-        if(el.second.size() > 1)
+        int c = f(n);
+        if(first_occ.count(c))
         {
-            cout << el.second[0] << "\n";
-            cout << el.second[1] << "\n";
-            return 0;
+            b = i;
+            a = first_occ[c];
+            break;
         }
+        first_occ[c] = i;
+
+        if(!prev_permutation(begin(n), end(n)))
+            break;
+
+        if(n[0] == '0')
+            break;
     }
 
-    cout << -1 << "\n";
+    if(a == -1 && b == -1)
+    {
+        cout << -1 << "\n";
+    } else
+    {
+        // recupero le due permutazioni
+        cout << n << "\n";
+        for(int i = b; i > a; i--)
+            next_permutation(begin(n), end(n));
+        cout << n << "\n";
+    }
 }

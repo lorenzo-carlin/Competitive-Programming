@@ -1,66 +1,54 @@
 #include <bits/stdc++.h>
+#pragma GCC optimize("O2")
+#pragma GCC optimize("Ofast")
 using namespace std;
 using ll = long long;
 
 constexpr int LOG = 20;
-constexpr int INF = 1e9;
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
+	cout.tie(NULL);
 
 	int n, q; cin >> n >> q;
 	vector<int> v(n);
-	for(int &i: v) cin >> i;
+	for(auto &i: v) cin >> i;
 
-	// adji[i] = j, v[i] è connesso a (1 << j)
-	// adjj[j] = i, (1 << j) è connesso a v[i]
-	vector<vector<int>> adji(n);
-	vector<vector<int>> adjj(LOG);
+	// [0, ..., n-1] -> valori dati
+	// [n, ..., n+20] -> potenze di due
+	
+	vector<vector<pair<int,int>>> adj(n+LOG);
 	for(int i = 0; i < n; ++i)
 	{
 		for(int j = 0; j < LOG; ++j)
 		{
 			if(v[i] & (1 << j))
 			{
-				adji[i].push_back(j);
-				adjj[j].push_back(i);
+				adj[i].push_back({n+j, 0});
+				adj[n+j].push_back({i, 1});
 			}
 		}
 	}
 
-	vector<vector<int>> dist(LOG, vector<int> (n, INF));
+	vector<vector<int>> dist(LOG, vector<int> (n+LOG, 1e9));
 	for(int j = 0; j < LOG; ++j)
 	{
-		// {nodo, distanza, cond}
-		// cond = true, se analizziamo un nodo inesistente (potenza di due)
-		// cond = false, se analizziamo un nodo esistente (un nodo di v)
-		queue<array<int,3>> q;
-		q.push({j, 0, true});
-
-		while(!q.empty())
+		queue<int> pq; // nodo
+		pq.push(n+j);
+		dist[j][n+j] = 0;
+		while(!pq.empty())
 		{
-			int node  = q.front()[0];
-			int dis   = q.front()[1];
-			bool cond = q.front()[2];
-			q.pop();
+			int v = pq.front();
+			pq.pop();
 
-			if(cond) // siamo in un nodo inesistente
+			for(auto [u, q]: adj[v])
 			{
-				for(int v: adjj[node])
+				if(dist[j][u] > dist[j][v]+q)
 				{
-					if(dist[j][v] != INF) continue;
-					q.push({v, dis+1, false});
-				}
-			} else // siamo in un nodo esistente
-			{
-				if(dis >= dist[j][node]) continue;
-				dist[j][node] = dis;
-
-				for(int v: adji[node])
-				{
-					q.push({v, dis, true});
+					dist[j][u] = dist[j][v]+q;
+					pq.push(u);
 				}
 			}
 		}
@@ -70,14 +58,11 @@ int main()
 	{
 		cin >> a >> b;
 		a--; b--;
-		int mn = INF;
+		int ans = 1e8;
 		for(int j = 0; j < LOG; ++j)
 		{
-			mn = min(mn, dist[j][a]+dist[j][b]-1);
+			ans = min(ans, dist[j][a]+dist[j][b]-1);
 		}
-
-		int ans = (mn >= 1e9) ? (-1) : (mn);
-		cout << ans << "\n";
+		cout << (ans == 1e8 ? -1 : ans) << "\n";
 	}
-
-}	
+}

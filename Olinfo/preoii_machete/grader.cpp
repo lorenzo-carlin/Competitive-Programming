@@ -3,9 +3,7 @@
 
 using namespace std;
 
-int machete(int N, int K, vector<int> P) {
-    return 42;
-}
+int machete(int N, int K, vector<int> P);
 
 // GRADER DI ESEMPIO, NON MODIFICARE
 

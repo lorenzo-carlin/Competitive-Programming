@@ -42,39 +42,7 @@ long long conta(vector<int> &v)
     return ans;
 }
 
-long long paletta_sort(int N, int V[])
-{
-    vector<int> v1; // pari
-    vector<int> v2; // dispari
-    for(int i = 0; i < N; ++i)
-    {
-        if(V[i] % 2 == 1 && i % 2 == 0)
-        {
-            return -1;
-        }
-        if(V[i] % 2 == 0 && i % 2 == 1)
-        {
-            return -1;
-        }
-        if(i % 2 == 0)
-        {
-            v1.push_back(V[i]);
-        } else if(i % 2 == 1)
-        {
-            v2.push_back(V[i]);
-        }
-    }
-
-    // bubblesort sui due vector
-    long long ans = 0;
-    //ans += bubblesort(v1);
-    //ans += bubblesort(v2);
-
-    ans += conta(v1);
-    ans += conta(v2);
-
-    return ans;
-}
+long long paletta_sort(int N, int V[]);
 
 int main() {
 	#ifdef EVAL

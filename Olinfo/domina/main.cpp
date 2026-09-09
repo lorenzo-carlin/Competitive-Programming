@@ -5,10 +5,13 @@ using ll = long long;
 int n, m;
 vector<vector<int>> adj, adjR;
 vector<bool> occ, qk;
+vector<pair<int,int>> archi;
 
 void solve()
 {
+	// 1) Scomposizione
 	// Scelgo un nodo a caso (il primo della lista).
+	
 	int nodo = -1;
 	vector<int> vicini;
 	for(int i = 0; i < n; ++i)
@@ -92,6 +95,7 @@ int main()
 	adjR.resize(n);
 	occ.resize(n);
 	qk.resize(n);
+	archi.resize(m);
 
 	for(int i = 0, a, b; i < m; ++i)
 	{
@@ -99,6 +103,7 @@ int main()
 		a--; b--;
 		adj[a].push_back(b);
 		adjR[b].push_back(a);
+		archi[i] = {a, b};
 	}
 
 	solve();

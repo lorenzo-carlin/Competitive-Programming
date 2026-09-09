@@ -10,7 +10,6 @@ ll compute(ll n)
 	{
 		ll j = (n/i);
 		ll k = ((n/i) - (n/(i+1)))*i;
-		//cout << i << ": " << j << " " << k << "\n";
 		if((n/i) - (n/(i+1)) == 1 && j == k) ans += j;
 		else ans += (j + k);
 	}

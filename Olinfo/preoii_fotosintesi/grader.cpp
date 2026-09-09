@@ -1,9 +1,7 @@
 #include <iostream>
 using namespace std;
 
-int fotosintesi (int N, string S) {
-    return 0;
-}
+int fotosintesi (int N, string S);
 
 // GRADER DI ESEMPIO, NON MODIFICARE
 

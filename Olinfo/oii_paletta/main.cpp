@@ -70,17 +70,3 @@ ll paletta_sort(int n, int v[])
 
     return inv;
 }
-
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    
-    int n; cin >> n;
-    int a[n];
-    for(int i = 0; i < n; ++i)
-    {
-        cin >> a[i];
-    }
-    cout << paletta_sort(n, a) << "\n";
-}

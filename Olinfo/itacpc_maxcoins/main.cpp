@@ -2,16 +2,21 @@
 using namespace std;
 using ll = long long;
 
-constexpr ll INF = 1e18;
+constexpr ll INF = (1LL << 60);
 
 int main()
 {
-    int n, m; cin >> n >> m;
-    vector<int> c(n);
-    for(int &i: c) cin >> i;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    cin >> n >> m;
+
+    vector<ll> c(n);
+    for (ll &i : c) cin >> i;
 
     vector<vector<int>> adj(n), adjT(n);
-    for(int i = 0, a, b; i < m; i++)
+    for (int i = 0, a, b; i < m; i++)
     {
         cin >> a >> b;
         adj[a].push_back(b);
@@ -20,78 +25,95 @@ int main()
 
     vector<bool> vis(n, false);
     vector<int> order;
-    auto dfs1 = [&] (auto dfs1, int v, int p) -> void
+
+    auto dfs1 = [&](auto self, int v) -> void
     {
         vis[v] = true;
-        for(int u: adj[v])
-        {
-            if(vis[u]) continue;
-            dfs1(dfs1, u, v);
-        }
+        for (int u : adj[v])
+            if (!vis[u])
+                self(self, u);
         order.push_back(v);
     };
 
-    for(int i = 0; i < n; i++)
-    {
-        if(vis[i]) continue;
-        dfs1(dfs1, i, -1);
-    }
-    reverse(begin(order), end(order));
+    for (int i = 0; i < n; i++)
+        if (!vis[i])
+            dfs1(dfs1, i);
 
-    vector<int> component, root(n);
-    auto dfs2 = [&] (auto dfs2, int v, int p) -> void
+    reverse(order.begin(), order.end());
+
+    vector<int> root(n);
+    vector<int> component;
+    vis.assign(n, false);
+
+    auto dfs2 = [&](auto self, int v) -> void
     {
         vis[v] = true;
         component.push_back(v);
-        for(int u: adjT[v])
-        {
-            if(vis[u]) continue;
-            dfs2(dfs2, u, v);
-        }
+        for (int u : adjT[v])
+            if (!vis[u])
+                self(self, u);
     };
 
-    vis.assign(n, false);
-    vector<int> toposort;
-    for(int i = 0; i < n; i++)
+    for (int x : order)
     {
-        int x = order[i];
-        if(vis[x]) continue;
-        toposort.push_back(x);
-        dfs2(dfs2, x, -1);
-        ll tot = 0;
-        for(int el: component)
-        {
-            root[el] = x;
-            tot += c[el];
-        }
-        c[x] = tot;
+        if (vis[x]) continue;
+
         component.clear();
+        dfs2(dfs2, x);
+
+        ll sum = 0;
+        for (int v : component)
+        {
+            root[v] = x;
+            sum += c[v];
+        }
+        c[x] = sum;
     }
 
-    vector<set<int>> G(n);
-    for(int i = 0; i < n; i++)
+    vector<vector<int>> G(n);
+    vector<int> indeg(n, 0);
+
+    for (int i = 0; i < n; i++)
     {
-        for(int el: adj[i])
+        for (int j : adj[i])
         {
-            if(root[i] != root[el])
+            if (root[i] != root[j])
             {
-                G[root[i]].insert(root[el]);
+                G[root[i]].push_back(root[j]);
+                indeg[root[j]]++;
             }
         }
     }
 
+    queue<int> q;
+    vector<int> topo;
+
+    for (int i = 0; i < n; i++)
+        if (indeg[i] == 0 && c[i] > 0)
+            q.push(i);
+
+    while (!q.empty())
+    {
+        int u = q.front(); q.pop();
+        topo.push_back(u);
+        for (int v : G[u])
+            if (--indeg[v] == 0)
+                q.push(v);
+    }
+
     int st = root[0];
-    int fn = root[n-1];
+    int fn = root[n - 1];
 
     vector<ll> dp(n, -INF);
     dp[st] = c[st];
 
-    for(int el: toposort)
+    for (int u : topo)
     {
-        if(dp[el] == -INF) continue;
-        for(int u: G[el])
-            dp[u] = max(dp[u], dp[el]+c[u]);
+        if (dp[u] == -INF) continue;
+        for (int v : G[u])
+            dp[v] = max(dp[v], dp[u] + c[v]);
     }
 
     cout << dp[fn] << "\n";
+    return 0;
 }

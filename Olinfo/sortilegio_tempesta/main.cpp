@@ -2,60 +2,74 @@
 using namespace std;
 using ll = long long;
 
-long long atterra(int n, vector<int> U, vector<int> V)
+long long atterra(int n, vector<int> u, vector<int> v)
 {
     vector<vector<int>> adj(n);
     for(int i = 0; i < n-1; i++)
     {
-        adj[U[i]].push_back(V[i]);
-        adj[V[i]].push_back(U[i]);
+        adj[u[i]].push_back(v[i]);
+        adj[v[i]].push_back(u[i]);
     }
-    vector<ll> mn(n, 1e12);
-    vector<bool> path(n, false);
 
+    vector<bool> onpath(n, false);
     auto find_path = [&] (auto find_path, int v, int p) -> void
     {
-        if(v == n-1) path[v] = true;
+        if(v == n-1)
+            onpath[v] = true;
 
         for(int u: adj[v])
         {
             if(u == p) continue;
             find_path(find_path, u, v);
-            if(path[u]) path[v] = true;
-        }
-    };
-
-    auto find_mn = [&] (auto find_mn, int v, int p) -> void
-    {
-        if(p != -1) mn[v] = min(mn[v], mn[p]+1);
-
-        for(int u: adj[v])
-        {
-            if(u == p) continue;
-            if(!path[u]) mn[v] = 1;
-            else find_mn(find_mn, u, v);
-            mn[v] = min(mn[v], mn[u]+1);
+            if(onpath[u])
+                onpath[v] = true;
         }
     };
 
     find_path(find_path, 0, -1);
-    find_mn(find_mn, 0, -1);
 
-    ll tot = 0;
+    queue<int> q;
+
+    vector<ll> dist(n, 1e9);
     for(int i = 0; i < n; i++)
     {
-        if(path[i])
+        if(!onpath[i])
         {
-            tot += mn[i];
-            if(mn[i] >= 1e12)
+            dist[i] = 0;
+            q.push(i);
+        }
+    }
+
+    while(!q.empty())
+    {
+        int v = q.front();
+        q.pop();
+
+        for(int u: adj[v])
+        {
+            if(dist[v]+1 < dist[u])
             {
-                tot = -1;
-                break;
+                dist[u] = dist[v]+1;
+                q.push(u);
             }
         }
     }
 
-    return tot;
+    ll ans = 0;
+    bool possible = true;
+    for(int i = 0; i < n; i++)
+    {
+        if(onpath[i])
+        {
+            if(dist[i] >= 1e9)
+                possible = false;
+            ans += dist[i];
+        }
+    }
+
+    if(!possible) ans = -1;
+
+    return ans;
 }
 
 // GRADER DI ESEMPIO, NON MODIFICARE
