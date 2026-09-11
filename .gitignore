@@ -1,0 +1,156 @@
+# ============================================================
+
+# C++ / CMake build artifacts
+
+# ============================================================
+
+# Compiled executables
+
+main
+a.out
+*.out
+*.exe
+
+# Object files
+
+*.o
+*.obj
+
+# Static and dynamic libraries
+
+*.a
+*.so
+*.dll
+*.dylib
+*.lib
+
+# Debugging / profiling
+
+*.dSYM/
+*.stackdump
+
+# ============================================================
+
+# Build directories
+
+# ============================================================
+
+build/
+cmake-build-*/
+out/
+bin/
+debug/
+release/
+
+# ============================================================
+
+# CMake
+
+# ============================================================
+
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# ============================================================
+
+# IDEs / Editors
+
+# ============================================================
+
+# Visual Studio Code
+
+.vscode/
+
+# JetBrains
+
+.idea/
+*.iml
+
+# Visual Studio
+
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Xcode
+
+xcuserdata/
+*.xcuserstate
+
+# ============================================================
+
+# Vim / Neovim
+
+# ============================================================
+
+*.swp
+*.swo
+*.swn
+*.swm
+*.un~
+*.vimrc
+
+# ============================================================
+
+# OS generated files
+
+# ============================================================
+
+# macOS
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+# Linux
+
+*~
+
+# ============================================================
+
+# Temporary / backup files
+
+# ============================================================
+
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+
+# ============================================================
+
+# Profiling / sanitizer output
+
+# ============================================================
+
+*.prof
+*.profraw
+*.gcda
+*.gcno
+*.gcov
+
+# ============================================================
+
+# Local testing
+
+# ============================================================
+
+test_output/
+input.txt
+output.txt
+
