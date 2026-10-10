@@ -6,6 +6,27 @@ The repository documents my progression through competitive programming, from in
 
 ---
 
+## Profiles
+
+<div align="center">
+
+[![AtCoder](https://img.shields.io/badge/AtCoder-LorenzoC-3E4E88?style=flat-square&logo=atcoder&logoColor=white)](https://atcoder.jp/users/LorenzoC)
+
+[![CSES](https://img.shields.io/badge/CSES-LorenzoC-1A1A1A?style=flat-square)](https://cses.fi/user/139403)
+
+[![Codeforces](https://img.shields.io/badge/Codeforces-LorenzoC-1F8ACB?style=flat-square&logo=codeforces&logoColor=white)](https://codeforces.com/profile/LorenzoC)
+
+[![Kattis](https://img.shields.io/badge/Kattis-Lorenzo_Carlin-2D2D2D?style=flat-square)](https://open.kattis.com/users/lorenzo-carlin1)
+
+[![LeetCode](https://img.shields.io/badge/LeetCode-LorenzoC-FFA116?style=flat-square&logo=leetcode&logoColor=white)](https://leetcode.com/u/b5U0aS5PoL/)
+
+[![Olinfo Training](https://img.shields.io/badge/Olinfo_Training-LorenzoC-4C4C4C?style=flat-square)](https://training.olinfo.it/user/LorenzoC)
+
+
+</div>
+
+---
+
 ## Repository Structure
 
 The repository is divided into two main areas:
