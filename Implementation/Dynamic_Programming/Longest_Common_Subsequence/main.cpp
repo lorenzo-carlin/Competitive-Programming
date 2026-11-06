@@ -1,7 +1,6 @@
 /*
- * Longest Increasing Subsequence
- * Finds the longest subsequence of a sequence whose elements are in strictly
- * increasing order.
+ * Longest Common Subsequence
+ * Finds the longest subsequence of a sequence whose elements are in common.
  */
 
 
